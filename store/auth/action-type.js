@@ -1,0 +1,4 @@
+const LOGIN = 'LOGIN'
+const LOGOUT = 'LOGOUT'
+const SOCIAL_LOGIN = 'SOCIAL_LOGIN'
+export { LOGIN, LOGOUT, SOCIAL_LOGIN }

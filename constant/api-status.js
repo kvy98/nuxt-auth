@@ -1,0 +1,5 @@
+const IDLE = 'IDLE'
+const PENDING = 'PENDING'
+const SUCCESS = 'SUCCESS'
+const ERROR = 'ERROR'
+export { IDLE, PENDING, SUCCESS, ERROR }
