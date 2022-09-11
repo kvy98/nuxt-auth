@@ -72,11 +72,14 @@ export const actions = {
     commit(SET_AUTH, apiPendingFactory())
 
     const { response, error } = await withAsync(
-      this.$repository.auth.login(email, password)
+      this.$repository.auth.login,
+      email,
+      password
     )
     console.log(response)
     if (error) {
       // Error status
+      console.log(error)
       commit(SET_AUTH, apiErrorFactory(error, 'Oops, there was a problem'))
       return
     }
