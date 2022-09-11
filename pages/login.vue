@@ -10,11 +10,13 @@
     <div>
       <input v-model="password" type="password" />
     </div>
-    <div><button>Login</button></div>
+    <div><button @click="login(email, password)">Login</button></div>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import { LOGIN, actionPath } from "~/constant/action/auth";
 export default {
   name: "LoginPage",
   data() {
@@ -23,6 +25,10 @@ export default {
       password: "",
     };
   },
-  methods: {},
+  methods: {
+    ...mapActions({
+      login: actionPath(LOGIN),
+    }),
+  },
 };
 </script>

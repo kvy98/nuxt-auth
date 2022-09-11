@@ -1,6 +1,6 @@
-import { LOGIN, LOGOUT, SOCIAL_LOGIN } from './action-type'
-import { withAsync } from '~/helpers/withAsync'
+import { LOGIN, LOGOUT, SOCIAL_LOGIN } from '../../constant/action/auth'
 import { PENDING, IDLE, SUCCESS, ERROR } from '~/constant/api-status'
+import { withAsync } from '~/helpers/api/withAsync'
 import {
   apiErrorFactory,
   apiPendingFactory,
@@ -24,12 +24,14 @@ export const state = () => ({
   fetchingStatus: IDLE,
 })
 
-export const getters = {}
+export const getters = {
+  loggedIn(state) {
+    return state.data.isAuth
+  },
+}
 
 export const mutations = {
   [SET_AUTH](state, payload) {
-    const { id, accessToken } = payload.data
-
     switch (payload.status) {
       case PENDING:
         // Reset the error if it was set before
@@ -37,11 +39,15 @@ export const mutations = {
         state.error && (state.errorMessage = '')
         break
       case SUCCESS:
+        {
+          const { id, accessToken } = payload.data
+          state.data.isAuth = true
+          this.$cookies.set('uid', id)
+          this.$cookies.set('access_token', accessToken)
+          this.$axios.setToken(accessToken, 'Bearer')
+          this.$route.replace('/account')
+        }
         // API call was successful and we have data
-        state.isAuth = true
-        this.$cookies.set('uid', id)
-        this.$cookies.set('access_token', accessToken)
-        this.$axios.setToken(accessToken, 'Bearer')
         break
       case ERROR:
         // There was an error during the API call
@@ -50,7 +56,7 @@ export const mutations = {
         break
     }
     // Update the status
-    state.fetchAppConfigStatus = payload.status
+    state.fetchingStatus = payload.status
   },
 
   [SET_AUTH_DEFAULT](state) {
@@ -63,11 +69,12 @@ export const mutations = {
 
 export const actions = {
   async [LOGIN]({ commit }, { email, password }) {
-    commit('SET_FETCH_APP_CONFIG_STATE', apiPendingFactory())
+    commit(SET_AUTH, apiPendingFactory())
 
     const { response, error } = await withAsync(
       this.$repository.auth.login(email, password)
     )
+    console.log(response)
     if (error) {
       // Error status
       commit(SET_AUTH, apiErrorFactory(error, 'Oops, there was a problem'))

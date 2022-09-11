@@ -1,6 +1,6 @@
-import Auth from './auth'
+import AuthRepository from './auth'
 export default (axios) => {
   return {
-    auth: Auth(axios),
+    auth: AuthRepository(axios),
   }
 }
