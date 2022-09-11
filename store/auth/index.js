@@ -76,10 +76,8 @@ export const actions = {
       email,
       password
     )
-    console.log(response)
     if (error) {
       // Error status
-      console.log(error)
       commit(SET_AUTH, apiErrorFactory(error, 'Oops, there was a problem'))
       return
     }

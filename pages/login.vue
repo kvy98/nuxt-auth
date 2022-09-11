@@ -19,6 +19,9 @@ import { mapActions } from "vuex";
 import { LOGIN, actionPath } from "~/constant/action/auth";
 export default {
   name: "LoginPage",
+  meta: {
+    auth: false,
+  },
   data() {
     return {
       email: "",
